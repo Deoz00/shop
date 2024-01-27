@@ -17,20 +17,24 @@ class buscarController extends Controller
     {
       //
       $categorias['categorias']=categorias::all();
-      $productos['productos']=Producto::all();
       
         
         if(isset($request->categoria)){
-          
-            $productos['productos']=Producto::where('categoria_id', $request->categoria)->get();
+            $productos['productos']=Producto::where('categoria_id', $request->categoria)->where('stock','>',0)->get();
            
+        } elseif(isset($request->b)){
+                    
+
+            $productos['productos']=Producto::where('nombre', 'LIKE', '%' .$request->b.'%')->where('stock','>',0)->get();
+           
+        }else{
+    
+
+           // $productos['productos']=Producto::where('stock','>',0)->get();
+
         }
         
-        if(isset($request->b)){
-           
-            $productos['productos']=Producto::where('nombre', 'LIKE', '%' .$request->b.'%')->get();
-           
-        }
+       
         
       //  return $productos;
         return view ('buscar',$categorias, $productos);
@@ -39,7 +43,7 @@ class buscarController extends Controller
     public function inicio(Request $request){
         
         $categorias['categorias']=categorias::all();
-        $productos['productos']=Producto::all();
+        $productos['productos']=Producto::where('stock','>',0)->get();
         return view ('inicio',$categorias, $productos);
     }
 

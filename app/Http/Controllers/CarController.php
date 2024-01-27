@@ -72,9 +72,8 @@ class CarController extends Controller
         return redirect()->route('cart.list');
     }
 
-    public function comprar(){
+    public function comprar(Request $request){
         
-
         $lista = \Cart::getContent();
         
         foreach ($lista as $item) {

@@ -13,6 +13,8 @@
     </div>
     <div class="carousel-item">
       <img style="width: 18rem; height: 16rem;" src="{{ asset('storage').'/'. 'uploads/Jn2VzTHKIFE44Tr3UZUyGbdjT5qSz5oZObdWFUgB.jpg'}}" class="d-block w-100" alt="...">
+      
+      
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

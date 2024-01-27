@@ -15,7 +15,6 @@ class AuthController extends Controller
     public function autenticar(Request $request){
        
 
-        
        
         if( $request['tipo']== 'ingresar'){
             
@@ -59,7 +58,8 @@ class AuthController extends Controller
         ]);
         $request['password'] = bcrypt($request['password']);
         $user = user::create($request->only('name','email','password'));
-        return "regis";
+        return redirect('/auth');
+       
         }
        
     }

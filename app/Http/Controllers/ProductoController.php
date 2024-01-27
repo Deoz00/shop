@@ -6,6 +6,8 @@ use App\Models\Producto;
 use App\Models\categorias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductoController extends Controller
 {
@@ -18,10 +20,11 @@ class ProductoController extends Controller
     {
         //
         
-        $productos['productos']=Producto::where('usuario_id',Auth::user()->id)->get();
+        $productos = Producto::where('usuario_id',Auth::user()->id)->get();
+        $categorias = categorias::select('id', 'nombre')->get();
         
         
-        return view('home', $productos);     
+        return view('home', compact('productos', 'categorias'));     
     }
 
     /**
@@ -54,17 +57,18 @@ class ProductoController extends Controller
 
         ]);
        
-        
         //}
         //$datosUsuario = request()->all();
         $datos = request()->except('_token');
         if($request->hasFile('foto')){
            $credentials['foto']=$request->file('foto')->store('uploads', 'public'); 
+           
+
            $credentials['usuario_id']= Auth::user()->id;
         }
-       
+       //dd($credentials);
 
-        Producto::insert($credentials);
+        Producto::create($credentials);
         return redirect('home');
     }
 
@@ -88,6 +92,7 @@ class ProductoController extends Controller
     public function edit(Producto $producto)
     {
         //
+        dd("dd");
     }
 
     /**
@@ -97,9 +102,35 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request)
     {
         //
+      
+
+        $credentials = $request->validate([
+                
+            'nombre' => ['required', 'string'],
+            'descripcion' => ['required', 'string'],
+            'categoria_id' => ['required'],
+            'stock' => ['required','numeric'],  
+            'precio' => ['required','numeric'],
+        ]);
+       
+        //}
+        //$datosUsuario = request()->all();
+        $id = $request->id;
+        $datos = request()->except('_token','_method','id');
+        if($request->hasFile('foto')){
+            $rutaImagen = Producto::select('foto')->find($id)->foto;
+           
+           $datos['foto']=$request->file('foto')->store('uploads', 'public'); 
+           Storage::delete($rutaImagen);
+
+        }
+
+        Producto::findOrFail($id)->update($datos);
+
+        return redirect('home');
     }
 
     /**

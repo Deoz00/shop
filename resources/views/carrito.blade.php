@@ -19,14 +19,17 @@
   
   </head>
   <body style="background: #ededed;">
+  
     
         @include('header')
         <div class="d-flex flex-column w-75 container p-0">
-        @foreach(Cart::getContent() as $item)
+        @foreach(Cart::getContent()->sortBy('id') as $item)
+  
           <div style="border-color:#cccccc!important;" class="border border-1 border-top-0 border-end-0 border-start-0 p-2 d-flex " >
             <div><img class=" rounded-1" style="width: 5rem; height: 3rem;" src="{{ asset('storage').'/'.$item->attributes->image}}" alt="d"></div>
             <div class="w-50 ms-3 fs-5">
-               <div class="w-50 ms-3 fs-5">{{$item->name}}</div>
+               <div class="w-50 ms-3 fs-5">{{$item->name}} {{$item->id}}</div>
+
                <form action="{{ route('cart.remove') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" value="{{ $item->id }}" name="producto_id">
@@ -34,18 +37,22 @@
                                         <button type="submit" class="boton btn  btn-md" style="color:red" >Eliminar</button>
                                     </form>
             </div>
+
             <div class="w-25 ms-2"><input id="cantidad" style="width: 3rem; height: 2rem;" type="number" name="cantidad" value="{{$item->quantity}}"></div>
-              <form action="update-cart" method="post" id="FQ">
-                @csrf
-                <input type="hidden" name="id" value="{{ $item->id }}">
-                <input type="hidden" name="quantity" value="">
-              </form>
+
+             
 
 
             <div id="precio" name="precio" class="text-end w-25 me-2">{{$item->price}}</div> 
             
             
           </div>
+          <form action="update-cart" method="post" name="FQ">
+                @csrf
+                
+                <input type="hidden" name="id" value="{{ $item->id }}">
+                <input type="hidden" name="quantity" value="">
+              </form>
           
           
         @endforeach
@@ -67,11 +74,13 @@
         @else
         <h1 class="text-center">Carrito vacío</h1>
         @endif
+
+        
         
        
       <script>
 
-        let fq = document.getElementById("FQ");
+        let fq = document.getElementsByName("FQ");
         
 
         let total = document.getElementsByName('total');
@@ -103,7 +112,7 @@
 
            valor.addEventListener('change', (event) => {
             
-                fq.elements["quantity"].value = valor.value;
+                fq[indice].elements["quantity"].value = valor.value;
                 
                // console.log(valor.value);
 
@@ -117,7 +126,7 @@
                 }
                 total[0].textContent = sum;
                 console.log("cambiooo");
-                fq.submit();
+                fq[indice].submit();
             });
            
            

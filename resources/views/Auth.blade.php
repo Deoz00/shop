@@ -75,6 +75,5 @@
 
 
     </div>
-    @dd($errors)
 </body>
 </html>

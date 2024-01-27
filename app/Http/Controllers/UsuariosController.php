@@ -38,11 +38,12 @@ class UsuariosController extends Controller
     public function store(Request $request)
     {
         //
+        dd("ddddd");
         $datos = request()->except('_token');
        
 
         usuarios::insert($datos);
-        return response()->json($datos);
+        return redirect->back();
     }
 
     /**

@@ -20,6 +20,8 @@ use App\Http\Controllers\CarController;
 |
 */
 Route::get('/', [buscarController::class,'inicio'] );
+Route::put('/home', [ProductoController::class, 'update']);
+
 Route::resource('/buscar',buscarController::class);
 
 Route::resource('/home',ProductoController::class)->middleware('auth');
